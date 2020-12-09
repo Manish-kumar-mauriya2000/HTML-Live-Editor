@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js" integrity="sha512-GZ1RIgZaSc8rnco/8CXfRdCpDxRCphenIiZ2ztLy3XQfCbQUSCuk8IudvNHxkRA3oUg6q0qejgN/qqyG1duv5Q==" crossorigin="anonymous"></script>
+    <script src="ace/src-noconflict/ace.js"></script>
+    <script src="ace/src-noconflict/ext-language_tools.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ext-themelist.min.js" integrity="sha512-5CwAfXQtNsk5OzybMAJ3U14TStTq6jUHJoWxu58KOyioLXO3fX6FPUKaYp/2iF6yZMkv38fvh3nH+Vq94R2BUg==" crossorigin="anonymous"></script>
+
+    <!--    <link href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css" rel="stylesheet" />-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tingle/0.15.2/tingle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/mode-text.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.2/dist/FileSaver.min.js"></script>
+
+    
+    <link rel="stylesheet" href="style.css">
+    <title>HTML | EDITOR</title>
+</head>
+
+<body>
+    <div class="container-fluids">
+        <div class="main">
+
+            <h1 align="center" class="edit">HTML LIVE EDITOR</h1><br><br><br><br><br><br>
+
+
+            <div class="div1">
+
+                <label id="selectThemes">SELECT YOUR FAVOURITE THEMES:</label> <select class="custom-select" id="themes" style="width:200px;" onchange="themeSelect()">
+                    <option id="op" value="twilight">Twilight</option>
+                    <option id="op" value="monokai">Monokai</option>
+                    <option id="op" value="terminal">Terminal</option>
+                    <option id="op" value="eclipse">Eclipse</option>
+                    <option id="op" value="idle_fingers">Idle Fingers</option>
+                    <option id="op" value="iplastic">Iplastic</option>
+                    <option id="op" value="merbivore_soft">Merbivore Soft</option>
+                    <option id="op" value="sqlserver">Sqlserver</option>
+                    <option id="op" value="gruvbox">Gruvbox</option>
+                    <option id="op" value="nord_dark">Nord Dark</option>
+                    <option id="op" value="kr_theme">krTheme</option>
+
+                </select>
+            </div>
+            <div class="toolbar">
+                <label id="fileType">SAVE AND DOWNLOAD FILES :</label>
+                <select id="selectFile" name="sel-mode"></select>
+                <button name="btn-save" class="btn btn-success">Save</button>
+            </div><br><br>
+
+        </div><br><br>
+        <div class="box">
+            <div class="output1">
+                <p class="p1"> Type your code here:</p>
+            </div>
+            <div class="output2">
+                <p class="p2"> OUTPUT:</p>
+                <button id="btn" class="btn btn-primary" onclick="openFullscreen();">Click To view full screen</button>
+            </div>
+        </div>
+
+        <div id="editor">
+
+        </div>
+
+        <iframe id="iframe" frameBorder="0" onkeyup="update()">
+
+        </iframe><br><br>
+        <div class="offset-sm-5" id="middle">
+            <h2>editor features:</h2><br><br>
+            <ol>
+                <li>html</li>
+                <li>css</li>
+                <li>javascript</li>
+            </ol>
+        </div>
+        <footer>
+            <div class="foot">
+                <h4 class="tm-text-white tm-footer-text">
+                    Copyright &copy; 2020 designed by
+                    :Manish kumar mauriya
+                    <a href="#" class="tm-footer-link"></a>
+                </h4>
+            </div>
+        </footer>
+    </div>
+
+
+    <script src="./show_own_source.js"></script>
+    <script src="script.js"></script>
+    <script>
+        function update() {
+            var idoc = document.getElementById('iframe').contentWindow.document;
+
+            idoc.open();
+            idoc.write(editor.getValue());
+            idoc.close();
+        }
+
+
+
+        window.editor = ace.edit("editor");
+        editor.setTheme("ace/theme/twilight");
+        editor.getSession().setMode("ace/mode/html");
+        editor.setValue(`<!DOCTYPE html>
+
+<html>
+<head>
+
+</head>
+<body>
+
+</body>
+</html>`, 1); //1 = moves cursor to end
+
+        editor.getSession().on('change', function() {
+            update();
+        });
+        editor.focus();
+        editor.setOptions({
+
+            enableBasicAutocompletion: true,
+            enableSnippets: true,
+            enableLiveAutocompletion: true,
+            fontSize: "15pt",
+
+        });
+
+
+        function themeSelect() {
+            var thems;
+            thems = document.getElementById("themes").value;
+            editor.setTheme("ace/theme/" + thems);
+        }
+        var elem = document.getElementById("iframe");
+
+        function openFullscreen() {
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+                /* Firefox */
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {
+                /* Chrome, Safari & Opera */
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                /* IE/Edge */
+                elem.msRequestFullscreen();
+            }
+        }
+
+    </script>
+
+</body>
+
+</html>
